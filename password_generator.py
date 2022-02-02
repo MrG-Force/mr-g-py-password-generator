@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from generator import generate
 from tkinter import messagebox
 
 
@@ -21,6 +22,7 @@ class MainFrame(ttk.Frame):
         # Main content -> Notebook
         self.tabbed_container = ttk.Notebook(self)
         self.tabbed_container.configure(padding=[0, 10, 0, 0])
+
         # Main content -> Generator
         self.password_generator = PasswordGenerator(self.tabbed_container)
         self.password_generator.configure(style='Generator.TFrame', padding=(5, 5, 15, 0))
@@ -60,7 +62,7 @@ class PasswordGenerator(ttk.Frame):
                                       state='readonly')
         self.len_select.grid(column=2, row=0)
 
-        # Type of password selector
+        # Password type selector
         self.frame_pass_type = ttk.LabelFrame(self, text='Password type  ')
         self.frame_pass_type.grid(column=3, columnspan=4, row=0)
         self.p_types = ('Random', 'Custom')
@@ -80,7 +82,7 @@ class PasswordGenerator(ttk.Frame):
         self.inputs_chars.grid(column=0, columnspan=7, row=1, sticky='w')
 
         # Action buttons
-        self.btn_gen_password = ttk.Button(self, text='Generate')
+        self.btn_gen_password = ttk.Button(self, text='Generate', command=self.generate_password)
         self.btn_gen_password.grid(column=2, row=2)
 
         self.btn_gen_password = ttk.Button(self, text='Reset', command=self.reset_form)
@@ -91,15 +93,23 @@ class PasswordGenerator(ttk.Frame):
         self.output_password.configure(borderwidth=1, relief='groove', padding=(5, 10, 10, 10))
         self.output_password.grid(column=0, columnspan=7, sticky='nw')
 
+    def generate_password(self):
+        inputs = self.inputs_chars.get_input_values()
+        p = generate(inputs[0], inputs[1], inputs[2], self.pass_len.get())
+        print(p)
+        self.output_password.set_password(p)
+
     def toggle_password_type(self):
         if self.pass_type.get() == 'Random':
             self.inputs_chars.set_selectors_state('disabled')
             self.inputs_chars.clear_form()
+            self.output_password.clear_form()
             self.pass_len.set(9)
             self.len_select.configure(state='readonly')
         else:
             self.inputs_chars.set_selectors_state('readonly')
             self.pass_len.set(0)
+            self.output_password.clear_form()
             self.len_select.configure(state='disabled')
 
     def reset_form(self):
@@ -118,15 +128,15 @@ class ResultsFrame(ttk.Frame):
         # Result
         ttk.Label(self, text='  Your secure password: ', background='#e0eaf3'). \
             grid(column=0, columnspan=2, row=0, sticky='w')
-        self.password = StringVar(value='34@#r%56p{$rF00O')
+        self.password = StringVar(value='')
         self.password_output = ttk.Entry(self,
                                          state="readonly",
                                          textvariable=self.password,
-                                         font=('Cascadia Code Light', 11),
+                                         font=('Consolas', 11),
                                          width=21)
         self.password_output.grid(column=2, columnspan=3, row=0, sticky='w')
         # Copy & Save
-        self.btn_copy_password = ttk.Button(self, text='Copy', width=7)
+        self.btn_copy_password = ttk.Button(self, text='Copy', width=7, command=self.copy_to_clipboard)
         self.btn_copy_password.grid(column=5, row=0)
 
         self.btn_save_password = ttk.Button(self, text='Save', width=7, state=DISABLED)
@@ -134,6 +144,16 @@ class ResultsFrame(ttk.Frame):
 
     def clear_form(self):
         self.password.set('')
+
+    def set_password(self, password: str):
+        self.password.set(password)
+
+    def copy_to_clipboard(self):
+        r = Tk()
+        r.withdraw()
+        r.clipboard_clear()
+        r.clipboard_append(self.password.get())
+        r.destroy()
 
 
 class HowManyCharsSelector(ttk.LabelFrame):
@@ -209,7 +229,7 @@ class HowManyCharsSelector(ttk.LabelFrame):
                     self.selectors[i].configure(to=self.inputs[i].get() + self.avail_chars)
 
     def get_input_values(self):
-        return self.inputs
+        return [i.get() for i in self.inputs]
 
     def set_selectors_state(self, state):
         self.state = state
