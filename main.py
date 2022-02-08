@@ -15,7 +15,7 @@ class MainFrame(ttk.Frame):
         self.style.configure(style='Generator.TFrame', background='#e0eaf3')
 
         # Header
-        self.frame_header = FrameHeader(self)
+        self.frame_header = HeaderFrame(self)
         self.frame_header.configure(borderwidth=1, relief='ridge', padding=5, style='Header.TFrame')
         self.frame_header.pack()
 
@@ -77,7 +77,7 @@ class PasswordGenerator(ttk.Frame):
             grid_column += 1
 
         # Define letters, numbers, symbols
-        self.inputs_chars = HowManyCharsSelector(self, self.pass_len)
+        self.inputs_chars = NumberOfCharsSelector(self, self.pass_len)
         self.inputs_chars.configure(padding=[0, 10, 10, 15], text='How many...  ')
         self.inputs_chars.grid(column=0, columnspan=7, row=1, sticky='w')
 
@@ -155,7 +155,7 @@ class ResultsFrame(ttk.Frame):
         r.destroy()
 
 
-class HowManyCharsSelector(ttk.LabelFrame):
+class NumberOfCharsSelector(ttk.LabelFrame):
     def __init__(self, container, pass_len: IntVar):
         super().__init__(container)
         # Geometry -> Columns
@@ -243,7 +243,7 @@ class HowManyCharsSelector(ttk.LabelFrame):
         length.set(self.max_length - self.avail_chars)
 
 
-class FrameHeader(ttk.Frame):
+class HeaderFrame(ttk.Frame):
     def __init__(self, container):
         super().__init__(container)
         self.logo = PhotoImage(file='img/logo.png')
