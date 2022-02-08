@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
-from generator import generate
-from tkinter import messagebox
+import generator
+# from tkinter import messagebox
 
 
 class MainFrame(ttk.Frame):
@@ -95,8 +95,7 @@ class PasswordGenerator(ttk.Frame):
 
     def generate_password(self):
         inputs = self.inputs_chars.get_input_values()
-        p = generate(inputs[0], inputs[1], inputs[2], self.pass_len.get())
-        print(p)
+        p = generator.generate(inputs[0], inputs[1], inputs[2], self.pass_len.get())
         self.output_password.set_password(p)
 
     def toggle_password_type(self):
@@ -223,7 +222,6 @@ class HowManyCharsSelector(ttk.LabelFrame):
     def increase_range(self, event, index):
         if self.avail_chars < self.max_length:
             self.avail_chars += 1
-            # print(f'Available chars: {self.avail_chars}\n')  # DEBUG
             for i in range(3):
                 if i != index:
                     self.selectors[i].configure(to=self.inputs[i].get() + self.avail_chars)
@@ -248,7 +246,7 @@ class HowManyCharsSelector(ttk.LabelFrame):
 class FrameHeader(ttk.Frame):
     def __init__(self, container):
         super().__init__(container)
-        self.logo = PhotoImage(file='logo.png')
+        self.logo = PhotoImage(file='img/logo.png')
         # Column definitions
         self.columnconfigure(0, minsize=70)
         self.columnconfigure(1, minsize=240)
@@ -269,7 +267,7 @@ class App(Tk):
         self.geometry('490x335')
         self.resizable(False, False)
 
-        self.iconphoto(True, PhotoImage(file='icon_lock.png'))
+        self.iconphoto(True, PhotoImage(file='img/icon_lock.png'))
 
         self.main_frame = MainFrame(self)
         self.main_frame.pack()
