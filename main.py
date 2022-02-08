@@ -1,7 +1,25 @@
+import os
+import sys
 from tkinter import *
 from tkinter import ttk
 from p_gen_widgets import header_frame, generator_frame
-# from tkinter import messagebox
+
+# TODO: Add Manager page
+# TODO: Add Database
+# TODO: Login
+# TODO: Register new user
+# TODO: run -> pyinstaller --onefile main.spec
+
+def img_resource_path(relative_path):
+    """Source: https://github.com/Jtonna/Processes-Killer/blob/master/Process%20Killer/app/process_killer_app.py"""
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 class MainFrame(ttk.Frame):
@@ -15,7 +33,7 @@ class MainFrame(ttk.Frame):
         self.style.configure(style='Generator.TFrame', background='#e0eaf3')
 
         # Header
-        self.frame_header = header_frame.HeaderFrame(self)
+        self.frame_header = header_frame.HeaderFrame(self, img_resource_path)
         self.frame_header.configure(borderwidth=1, relief='ridge', padding=5, style='Header.TFrame')
         self.frame_header.pack()
 
@@ -36,9 +54,7 @@ class App(Tk):
         self.title('GPasswords')
         self.geometry('490x335')
         self.resizable(False, False)
-
-        self.iconphoto(True, PhotoImage(file='img/icon_lock.png'))
-
+        self.iconphoto(True, PhotoImage(file=img_resource_path("img/icon_lock.png")))
         self.main_frame = MainFrame(self)
         self.main_frame.pack()
 

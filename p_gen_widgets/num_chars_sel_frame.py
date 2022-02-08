@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import ttk
+# from tkinter import messagebox
+# TODO: Add a message for when the user tries to get a password longer than 128
 
 
 class NumberOfCharsSelector(ttk.LabelFrame):
@@ -67,6 +69,7 @@ class NumberOfCharsSelector(ttk.LabelFrame):
                     self.selectors[i].configure(to=self.inputs[i].get() + self.avail_chars)
 
     def increase_range(self, event, index):
+        # print(f'Available chars: {self.avail_chars}\n')  # DEBUG
         if self.avail_chars < self.max_length:
             self.avail_chars += 1
             for i in range(3):
@@ -85,6 +88,9 @@ class NumberOfCharsSelector(ttk.LabelFrame):
         self.avail_chars = self.max_length
         for i in self.inputs:
             i.set(0)
+        # print(f'Available chars: {self.avail_chars}\n')  # DEBUG
+        for selector in self.selectors:
+            selector.configure(to=self.avail_chars)
 
     def update_password_length(self, length: IntVar):
         length.set(self.max_length - self.avail_chars)

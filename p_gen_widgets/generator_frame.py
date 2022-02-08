@@ -37,7 +37,7 @@ class PasswordGenerator(ttk.Frame):
         self.len_select.grid(column=2, row=0)
 
         # Password type selector
-        self.frame_pass_type = ttk.LabelFrame(self, text='Password type  ')
+        self.frame_pass_type = ttk.LabelFrame(self, text='Password type  ', padding=(5, 0, 0, 5))
         self.frame_pass_type.grid(column=3, columnspan=4, row=0)
         self.p_types = ('Random', 'Custom')
         grid_column = 0
@@ -47,7 +47,7 @@ class PasswordGenerator(ttk.Frame):
                                     value=t,
                                     variable=self.pass_type,
                                     command=lambda: self.toggle_password_type())
-            radio.grid(column=grid_column, row=0, ipadx=15, ipady=5)
+            radio.grid(column=grid_column, row=0, padx=15, pady=5)
             grid_column += 1
 
         # Define letters, numbers, symbols

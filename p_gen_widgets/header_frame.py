@@ -3,9 +3,9 @@ from tkinter import ttk
 
 
 class HeaderFrame(ttk.Frame):
-    def __init__(self, container):
+    def __init__(self, container, img_path):
         super().__init__(container)
-        self.logo = PhotoImage(file='img/logo.png')
+        self.logo = PhotoImage(file=img_path('img/logo.png'))
         # Column definitions
         self.columnconfigure(0, minsize=70)
         self.columnconfigure(1, minsize=240)
