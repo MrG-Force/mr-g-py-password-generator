@@ -1,7 +1,7 @@
 from tkinter import *
 from tkinter import ttk
 import generator
-import num_chars_sel_frame as char_select
+from p_gen_widgets import results_frame, num_chars_sel_frame as char_sel
 
 
 class PasswordGenerator(ttk.Frame):
@@ -51,7 +51,7 @@ class PasswordGenerator(ttk.Frame):
             grid_column += 1
 
         # Define letters, numbers, symbols
-        self.inputs_chars = char_select.NumberOfCharsSelector(self, self.pass_len)
+        self.inputs_chars = char_sel.NumberOfCharsSelector(self, self.pass_len)
         self.inputs_chars.configure(padding=[0, 10, 10, 15], text='How many...  ')
         self.inputs_chars.grid(column=0, columnspan=7, row=1, sticky='w')
 
@@ -63,7 +63,7 @@ class PasswordGenerator(ttk.Frame):
         self.btn_gen_password.grid(column=4, row=2)
 
         # Results
-        self.output_password = ResultsFrame(self)
+        self.output_password = results_frame.ResultsFrame(self)
         self.output_password.configure(borderwidth=1, relief='groove', padding=(5, 10, 10, 10))
         self.output_password.grid(column=0, columnspan=7, sticky='nw')
 
